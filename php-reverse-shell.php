@@ -1,13 +1,13 @@
 <?php
 // php-reverse-shell - Uma implementação de Shell Reverso em PHP
-// Copyright (C) 2007 h4ckthreat@gmail.com
+// Copyright (C) 2007 r0daemon@gmail.com
 //
 // Esta ferramenta pode ser usada apenas para fins legais. Os usuários assumem total responsabilidade
 // por quaisquer ações realizadas com esta ferramenta. O autor não se responsabiliza
 // por danos causados por esta ferramenta. Se esses termos não forem aceitáveis para você,
 // então não use esta ferramenta.
 //
-// Em todos os outros aspectos, aplica-se a GPL versão 2:
+// Em todos os outros aspectos, aplica-se a GPL versão 3:
 //
 // Este programa é software livre; você pode redistribuí-lo e/ou modificá-lo
 // nos termos da Licença Pública Geral GNU versão 2 conforme
@@ -27,7 +27,7 @@
 // você, então não use esta ferramenta.
 //
 // Você é incentivado a enviar comentários, melhorias ou sugestões
-// para mim em pentestmonkey@pentestmonkey.net
+// para mim em r0daemon@gmail.com
 //
 // Descrição
 // -----------
@@ -42,7 +42,6 @@
 //
 // Uso
 // -----
-// Veja http://pentestmonkey.net/tools/php-reverse-shell se você tiver dificuldades.
 
 set_time_limit (0);
 $VERSION = "1.0";
