@@ -167,10 +167,10 @@ disable_functions = proc_open, shell_exec, system, passthru, exec, popen, fsocko
 
 ## 🧑‍💻 Autor
 
-- Jadson Lima: [h4ckthreat](mailto:h4ckthreat@gmail.com)
+- [h4ckthreat](https://www.instagram.com/h4ckthreat/)
 
 ---
 
 ## 📄 Licença
 
-Distribuído sob a [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+Distribuído sob a [GNU GPL v3](https://www.gnu.org/licenses/old-licenses/gpl-3.0.html).
