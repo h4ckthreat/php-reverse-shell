@@ -1,9 +1,5 @@
 # 🐚 PHP Reverse Shell - Versão em Português
 
-Uma **implementação de shell reverso em PHP** baseada no script original de [pentestmonkey](http://pentestmonkey.net/tools/php-reverse-shell), com comentários traduzidos para o português, adaptado por [h4ckthreat](mailto:h4ckthreat@gmail.com).
-
----
-
 ## ⚠️ AVISO LEGAL
 
 > Este código é disponibilizado **somente para fins educacionais** ou para **testes de segurança autorizados**.  
