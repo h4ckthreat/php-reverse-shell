@@ -17,7 +17,7 @@ Este código é **potencialmente perigoso** e pode ser utilizado de forma malici
 
 ## 🔍 O que o código faz — Explicado passo a passo
 
-Este código é uma shell reversa, ou seja, um tipo de **backdoor** que faz com que o servidor PHP (vítima) se conecte a outro computador (atacante), oferecendo um terminal remoto com o mesmo privilégio do processo PHP (normalmente `www-data`, `apache`, etc.).
+Este código é um shell reverso, ou seja, um tipo de **backdoor** que faz com que o servidor PHP (vítima) se conecte a outro computador (atacante), oferecendo um terminal remoto com o mesmo privilégio do processo PHP (normalmente `www-data`, `apache`, etc.).
 
 ### 1. Configuração Inicial
 
