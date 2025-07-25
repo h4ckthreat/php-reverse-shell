@@ -1,6 +1,6 @@
 <?php
 // php-reverse-shell - Uma implementação de Shell Reverso em PHP
-// Copyright (C) 2007 pentestmonkey@pentestmonkey.net
+// Copyright (C) 2007 h4ckthreat@gmail.com
 //
 // Esta ferramenta pode ser usada apenas para fins legais. Os usuários assumem total responsabilidade
 // por quaisquer ações realizadas com esta ferramenta. O autor não se responsabiliza
