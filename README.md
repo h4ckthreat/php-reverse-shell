@@ -1,7 +1,7 @@
 
 # 🐚 PHP Reverse Shell
 
-Este repositório contém um script de **shell reversa em PHP**, adaptado e comentado em português, ideal para fins educacionais e testes de segurança autorizados.
+Este repositório contém um script de **shell reverso em PHP**, adaptado e comentado em português, ideal para fins educacionais e testes de segurança autorizados.
 
 ---
 
