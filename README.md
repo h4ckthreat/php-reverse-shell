@@ -167,7 +167,7 @@ disable_functions = proc_open, shell_exec, system, passthru, exec, popen, fsocko
 
 ## 🧑‍💻 Autor
 
-- [r0daemon](https://www.instagram.com/r0daemon/)
+- [r0daemon](https://www.instagram.com/h4ckthreat/)
 
 ---
 
